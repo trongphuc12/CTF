@@ -88,7 +88,7 @@ app.get('/changehonk', (req, res) => {
     res.redirect('/');
 });
 ```
-Khi truy cập http://honksay.ctf.maplebacon.org/ thì sẽ tiến hành kiểm tra xem client đã có cookie hay chưa, nếu chưasẽ set cookie mặc định cho client, còn nếu đã có sẽ tiến hành kiểm tra nếu cookie là object thì sẽ set finalhonk là cookie, nếu không phải object thì sẽ tiến hành santize xss cookie và set value cho message và amountoftimeshonked.
+Khi truy cập http://honksay.ctf.maplebacon.org/ thì sẽ tiến hành kiểm tra xem client đã có cookie hay chưa, nếu chưa sẽ set cookie mặc định cho client, còn nếu đã có sẽ tiến hành kiểm tra nếu cookie là object thì sẽ set finalhonk là cookie, nếu không phải object thì sẽ tiến hành santize xss cookie và set value cho message và amountoftimeshonked.
 ```javascript
 app.get('/', (req, res) => {
     if (req.cookies.honk){
