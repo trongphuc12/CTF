@@ -177,4 +177,5 @@ Tại đây ta có ý tưởng sẽ kết thúc câu lệnh insert và chạy c�
 "',extractvalue(1,concat(1,(SELECT texts from books limit 1))))#@gmail.com
 
 "',updatexml(1,concat(1,(SELECT texts from books limit 1)),1))#@gmail.com
-
+### Thêm
+Vì sao ta phải concat 1 với (SELECT texts from books limit 1) ? Vì ở đây ta đang lợi dụng updatexml hoặc extractvalue sẽ hiển thị ra lỗi với các thông tin mà ta muốn. Và để hiển thị ra lỗi thì tất nhiên ta phải làm cho nó xuất hiện lỗi, và lỗi ở đây chính là lỗi ngữ pháp (xpath grammar mistakes). Vì vậy ta nên concat với 1 hoặc các kí tự không thuộc grammar xpath để có thể láy flag đầy đủ .
