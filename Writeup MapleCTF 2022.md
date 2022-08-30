@@ -157,7 +157,7 @@ Bắt đầu là file validator.js, ta thấy function validateEmail() sẽ dùn
 ```
 Xét email format: user@domain
 
-isEmail sẽ xét phần user nếu user bắt đầu bằng " thì nó sẽ hiểu rằng chuỗi có dạng "something" sau đấy sẽ chuyển thành something mà không tiến hành filter bất cứ kí tự nào trong " ". Hàm validateEmail() sẽ thực thi khi ta tiến hành đăng ký email với option kindle, nên ta sẽ nhìn qua source code:
+isEmail sẽ xét phần user nếu user bắt đầu bằng " thì nó sẽ hiểu rằng chuỗi có dạng "something" sau đấy sẽ chuyển thành something, ta được dùng các kí tự có char code từ 13 đến 127 trong ASCII. Hàm validateEmail() sẽ thực thi khi ta tiến hành đăng ký email với option kindle, nên ta sẽ nhìn qua source code:
 ```javascript
  insertEmail(email, book_id) {
         const query = `INSERT INTO requests(email, book_id) VALUES('${email}', '${book_id}');`;
@@ -172,7 +172,7 @@ isEmail sẽ xét phần user nếu user bắt đầu bằng " thì nó sẽ hi�
         })
     }
 ```
-Tại đây ta có ý tưởng sẽ kết thúc câu lệnh insert và chạy thêm câu lệnh update, cho titile sẽ mang giá trị của texts để ta lấy flag, nhưng vì hàm isEmail giới hạn số kí tự, nên ta sẽ tìm cách khác, ta thấy rằng khi có lỗi xảy ra sẽ được hiển thị => Error Based Injection, tại đây ta có thể dùng updatexml hoặc là extractxml để tiến hành:
+Tại đây ta có ý tưởng sẽ kết thúc câu lệnh insert và chạy câu lệnh update cho title sẽ mang giá trị của texts để ta lấy flag, nhưng vì hàm isEmail giới hạn số kí tự, nên ta sẽ tìm cách khác, ta thấy rằng khi có lỗi xảy ra sẽ được hiển thị => Error Based Injection, tại đây ta có thể dùng updatexml hoặc là extractxml để tiến hành:
 ### Payload:
 "',extractvalue(1,concat(1,(SELECT texts from books limit 1))))#@gmail.com
 
