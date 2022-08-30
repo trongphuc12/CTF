@@ -146,7 +146,7 @@ Hàm visit() sẽ truy cập vào url, nên ta sẽ cho truy cập vào localhos
 # bookstore
 Challenge cho ta các source nên ta sẽ tiến hành xem qua các file.
 
-Bắt đầu là file validator.js, ta thấy function validateEmail() sẽ dùng isEmail của thư viện validator. Ta tiến hành tìm source code của validator trên google và ta sẽ có code của  ![isEmail](https://github.com/validatorjs/validator.js/blob/86a07ba4f3f710f639e92a62cf81dd3321ef9ee8/src/lib/isEmail.js) Tiến hành đọc qua code thì ta sẽ thấy 
+Bắt đầu là file validator.js, ta thấy function validateEmail() sẽ dùng isEmail của thư viện validator. Ta tiến hành tìm source code của validator trên google và ta sẽ có code của  [isEmail](https://github.com/validatorjs/validator.js/blob/86a07ba4f3f710f639e92a62cf81dd3321ef9ee8/src/lib/isEmail.js) Tiến hành đọc qua code thì ta sẽ thấy 
 ```javascript
   if (user[0] === '"') {
     user = user.slice(1, user.length - 1);
